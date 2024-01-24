@@ -1,4 +1,4 @@
-var question = document.querySelector(".question");
+var questionElement = document.querySelector(".question");
 var answerList = document.querySelector(".answer-list");
 var timerElement = document.querySelector(".timer-count");
 var startButton = document.querySelector(".start-button");
@@ -23,7 +23,7 @@ var questionData = [
 var scoreCounter = 0;
 var timer;
 var timerCount;
-var currentQuestion = 0;
+var currentQuestion = {};
 
 // The init function is called when the page loads 
 function init() {
@@ -36,12 +36,20 @@ function startGame() {
   timerCount = 60;
   // Prevents start button from being clicked when round is in progress
   startButton.disabled = true;
+  populateQuestion()
   startTimer()
+}
+
+function nextQuestion() {
+    // Pick a question from our question bank
+    const questionChoice = Math.floor(Math.random() * questionData.length);
+    const currentQuestion = questionData[questionChoice];
+    return currentQuestion
 }
 
 // The timeAtZero function is called when timercount = 0
 function timeAtZero() {
-  question.textContent = "Times UP!!!";
+  questionElement.textContent = "Times UP!!!";
   startButton.disabled = false;
   setScore();
 }
@@ -61,10 +69,33 @@ function startTimer() {
   }, 1000);
 }
 
+
+// populates both the answer and question field when called
+
 //
-// Need question and answers to be populated
-// |
-// V
+//
+//Working around here
+//
+//
+
+function populateQuestion() {
+  //finding our next question and putting it as a variable
+  currentQuestion = nextQuestion()
+
+  // Clear existing content
+  answerList.innerHTML = "";
+  questionElement.textContent = "";
+
+  let tempQuestion = currentQuestion.question;
+  questionElement.textContent = tempQuestion;
+
+  currentQuestion.answers.forEach(function(answer) {
+    const liElement = document.createElement("li");
+    liElement.textContent = answer;
+    liElement.classList.add("answer");
+    answerList.appendChild(liElement);
+  });
+}
 
 // Updates win count on screen and sets win count to client storage
 function setScore() {
