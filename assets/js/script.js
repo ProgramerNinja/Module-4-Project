@@ -3,6 +3,9 @@ var answerList = document.querySelector(".answer-list");
 var timerElement = document.querySelector(".timer-count");
 var startButton = document.querySelector(".start-button");
 var score = document.querySelector(".score");
+var resetButton = document.querySelector(".reset-button");
+var submitButton = document.querySelector(".submit-button");
+var submitSection = document.querySelector(".submit-section");
 
 // Array of question objects that contain the questions for the test
 var questionData = [
@@ -23,11 +26,16 @@ var questionData = [
 var scoreCounter = 0;
 var timer;
 var timerCount;
-var currentQuestion = {};
+var currentQuestion;
+var currentQuestionIndex;
+
 
 // The init function is called when the page loads 
 function init() {
-  getScore();
+  resetButton.style.display = "none";
+  submitSection.style.display = "none";
+  highScoresString = localStorage.getItem("highScores");
+  highScores = JSON.parse(highScoresString) || [];
 }
 
 // The startGame function is called when the start button is clicked
@@ -36,21 +44,25 @@ function startGame() {
   timerCount = 60;
   // Prevents start button from being clicked when round is in progress
   startButton.disabled = true;
+  startButton.style.display = "none";
+  submitSection.style.display = "none";
+  scoreCounter = 0;
+  nextQuestion()
   populateQuestion()
   startTimer()
 }
 
 function nextQuestion() {
-    // Pick a question from our question bank
-    const questionChoice = Math.floor(Math.random() * questionData.length);
-    const currentQuestion = questionData[questionChoice];
-    return currentQuestion
+  // Pick a question index from our question bank
+  currentQuestionIndex = Math.floor(Math.random() * questionData.length);
 }
 
 // The timeAtZero function is called when timercount = 0
 function timeAtZero() {
   questionElement.textContent = "Times UP!!!";
   startButton.disabled = false;
+  resetButton.style.display = "block";
+  submitSection.style.display = "block";
   setScore();
 }
 
@@ -61,7 +73,7 @@ function startTimer() {
     timerCount--;
     timerElement.textContent = timerCount;
     // Tests if time has run out
-    if (timerCount === 0) {
+    if (timerCount <= 0) {
       // Clears interval
       clearInterval(timer);
       timeAtZero();
@@ -71,16 +83,10 @@ function startTimer() {
 
 
 // populates both the answer and question field when called
-
-//
-//
-//Working around here
-//
-//
-
 function populateQuestion() {
+
   //finding our next question and putting it as a variable
-  currentQuestion = nextQuestion()
+  currentQuestion = questionData[currentQuestionIndex];
 
   // Clear existing content
   answerList.innerHTML = "";
@@ -97,51 +103,55 @@ function populateQuestion() {
   });
 }
 
+function SetHighScore () {
+  score = scoreCounter;
+  playerName = document.getElementById("player-name").value;
+  record = {
+    playerName,
+    score
+  }
+  highScores.push(record);
+  var updatedHighScores = JSON.stringify(highScores);
+  localStorage.setItem("highScores", updatedHighScores);
+};
+
 // Updates win count on screen and sets win count to client storage
 function setScore() {
   score.textContent = scoreCounter;
   localStorage.setItem("score", scoreCounter);
 }
 
-
-// These functions are used by init
-function getScore() {
-  // Get stored value from client storage, if it exists
-  var storedScore = localStorage.getItem("score");
-  // If stored value doesn't exist, set counter to 0
-  if (storedScore === null) {
-    scoreCounter = 0;
-  } else {
-    // If a value is retrieved from client storage set the scoreCounter to that value
-    scoreCounter = storedScore;
-  }
-  //Render win count to page
-  score.textContent = scoreCounter;
-}
-
 function checkCorrect(chosenAnswer) {
-  // Checks if the answer that was chosen matches the set correct answer
-  if (chosenAnswer === questionData[currentQuestion].answers[questionData[currentQuestion].correctAnswer]) {
-    // sets the isCorrect to true and adds to the score
-    isCorrect = true;
+  // Get the correct answer using the stored index
+  var correctAnswer = questionData[currentQuestionIndex].correctAnswer;
+  if (chosenAnswer === currentQuestion.answers[correctAnswer]) {
+    // adds to the score
     scoreCounter++;
-  } else{
-    timerCount - 5;
+    setScore()
+    nextQuestion()
+    populateQuestion()
+  } else {
+    timerCount = timerCount - 5;
   }
 }
 
 // Event listener to listen for an aswer being chosen
-document.addEventListener("click", function(event) {
+answerList.addEventListener("click", function(event) {
   // If the count is zero, exit function
-  if (timerCount === 0) {
+  if (timerCount <= 0) {
     return;
   }
   // grab the content of the answer selected and check against the correct answer
   var clickedElement = event.target;
   var chosenAnswer = clickedElement.textContent;
-    checkCorrect(chosenAnswer);
+  
+  // Call nextQuestion() only once, before the first question is displayed
+  if (typeof currentQuestionIndex === "undefined") {
+    nextQuestion();
   }
-);
+
+  checkCorrect(chosenAnswer);
+});
 
 // Attach event listener to start button to call startGame function on click
 startButton.addEventListener("click", startGame);
@@ -160,3 +170,4 @@ function resetGame() {
 }
 // Event listener for button
 resetButton.addEventListener("click", resetGame);
+submitButton.addEventListener("click", SetHighScore)
