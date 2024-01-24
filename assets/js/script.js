@@ -144,11 +144,6 @@ answerList.addEventListener("click", function(event) {
   // grab the content of the answer selected and check against the correct answer
   var clickedElement = event.target;
   var chosenAnswer = clickedElement.textContent;
-  
-  // Call nextQuestion() only once, before the first question is displayed
-  if (typeof currentQuestionIndex === "undefined") {
-    nextQuestion();
-  }
 
   checkCorrect(chosenAnswer);
 });
