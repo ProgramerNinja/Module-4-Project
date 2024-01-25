@@ -10,22 +10,11 @@
     <header>
       <div class= "large-font">QUIZ TIME!</div>
       <button class="start-button">Start</button>
+      <button class="reset-button">Try Again!</button>
     </header>
 
     <main>
-      <section>
-        <div class="card question-box">
-          <div class="large-font question"></div>
-        </div>
-      </section>
-
-      <section>
-        <div class="answer-box">
-          <ol class = "answer-list"></ol>
-        </div>
-      </section>
-      <button class="reset-button">Try Again!</button>
-      <section>
+      <section class="game-info">
         <div class= "card timer">
           <div class = "timer-text">
             <div class="large-font timer-count"></div>
@@ -35,16 +24,30 @@
         <div class="card score">
           <div class = "score-text">
             <div class="large-font score-count"></div>
-            <h3>Points</h3>
+            <h3>Points: 0</h3>
           </div>
         </div>
       </section>
+
+      <section class="question-section">
+        <div class="card question-box">
+          <div class="large-font question">Press the start button above to start!</div>
+        </div>
+
+        <section class="card submit-section">
+          <div>Please enter your name to submit your HIGH SCORE!</div>
+          <input id="player-name" type="text" placeholder="Please enter your name">
+          <button type="submit" class="submit-button">Submit</button>
+        </section>
+
+        <div class="answer-box">
+          <ul class = "answer-list"></ul>
+        </div>
+      </section>
+
     </main>
-    <section class="card submit-section">
-      <div class="">Please enter your name to submit your HIGH SCORE!</div>
-      <input id="player-name" type="text" placeholder="Please enter your name">
-      <button type="submit" class="submit-button">Submit</button>
-    </section>
+    <p>High Scores:</p>
+    <ul class="high-scores"></ul>
     <script src="assets/js/script.js"></script>
   </body>
 </html>

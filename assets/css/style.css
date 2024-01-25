@@ -12,17 +12,11 @@ body {
   background: linear-gradient(0deg, rgba(19,41,61,1) 0%, rgba(237,245,249,1) 63%);
 }
 
-.reset-button {
-  font-size: 16px;
-  height: 30px;
-  line-height: 8px;
-  margin-top: 20px;
-}
-
-.win-loss-container {
+.score-count {
   display: flex;
   justify-content: space-between;
   margin-top: 16px;
+  text-align: center;
 }
 
 button {
@@ -64,14 +58,33 @@ section {
   border-radius: 8px;
 }
 
-.word-guess {
-  width: 55vw;
-  height: 400px;
+.question-box {
+  display: flex;
+  align-content: center;
 }
 
-.results {
-  width: 30vw;
-  height: 400px;
+.question {
+  width: 75vw;
+  height: 100%;
+  text-align: center;
+}
+
+.answer-box {
+  width: 75vw;
+  font-size: 30px;
+}
+
+.answer {
+  background-color: #13293d;
+  border:2px solid #add7df;
+  margin: 5px;
+  padding: 5px;
+  color: white;
+  border-radius: 3px;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .card {
@@ -82,10 +95,6 @@ section {
     rgba(60, 64, 67, 0.15) 0 2px 4px 3px;
   margin: auto;
   padding: 20px;
-}
-
-.word-blanks {
-  line-height: 360px;
 }
 
 .large-font {
@@ -105,14 +114,39 @@ section {
   padding: 55px;
 }
 
+.submit-section {
+  font-size: larger;
+  text-align: center;
+}
+
+.game-info {
+  flex-direction: column;
+}
+
+.score {
+  display: flex;
+  justify-content: center;
+  width: 260px;
+}
+.submit-section {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#player-name {
+  font-size: 40px;
+  text-align: center;
+  border: 0px;
+  border-radius: 5px;
+  background-color: radial-gradient(circle, rgba(240,230,140,1) 25%, rgba(187,124,33,1) 100%);;
+  color: #000000;
+}
+
 @media screen and (max-width: 1183px) {
   main {
     flex-direction: column;
-  }
-
-  .word-guess,
-  .results {
-    width: 90vw;
   }
 
   section {
@@ -129,11 +163,11 @@ section {
 
   .reset-button {
     font-size: 12px;
-    width: 20ox;
+    width: 20px;
     
   }
 
   .timer {
     height: 200px;
   }
- 
+}
